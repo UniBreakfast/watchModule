@@ -7,4 +7,8 @@ const fn = require.cache.untilUpdate('./subfolder/submodule.js')
 
 module.exports = fn
 
+
+global.Class = require.fresh('./class.js')
+
+
 console.log(11)

@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/UniBreakfast/watchModule#readme",
   "dependencies": {
-    "up2require": "^1.1.0"
+    "up2require": "^1.1.2"
   }
 }
