@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/UniBreakfast/watchModule/issues"
   },
-  "homepage": "https://github.com/UniBreakfast/watchModule#readme"
+  "homepage": "https://github.com/UniBreakfast/watchModule#readme",
+  "dependencies": {
+    "up2require": "^1.1.0"
+  }
 }
