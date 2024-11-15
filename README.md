@@ -15,3 +15,41 @@ But the function is still working as it was before.
 On a next screenshot again while the app is running I change the API handler function, save the file and reload the page in browser to immediately see the changes without restarting node process.
 
 ![image](https://github.com/user-attachments/assets/2221dfea-4c91-476e-8aeb-b40e7c8134fc)
+
+And here is the `up2require` function module code itself:
+
+```javascript
+const {watch} = require('fs')
+const reloadingWrappers = {}
+
+module.exports = function upgradeToUpdate(require) {
+  function watchfulRequire(module, reloadUpdated) {
+    if (reloadUpdated) {
+      module = require.resolve(module)
+      if (module in reloadingWrappers) {
+        return reloadingWrappers[module]
+      } else {
+        watch(module, () => delete require.cache[module])
+
+        const wrapperFn = function (...args) {
+          if (new.target) return new (require(module))(...args)
+          return require(module).apply(this, args)
+        }
+
+        const wrapperProxy = new Proxy(wrapperFn, {get(_, prop) {
+          return require(module)[prop]
+        }})
+        return reloadingWrappers[module] = wrapperProxy
+      }
+    }
+    return require(module)
+  }
+
+  require.fresh = require.cache.untilUpdate =
+    module => watchfulRequire(module, true)
+
+  Object.assign(watchfulRequire, require)
+
+  return watchfulRequire
+}
+```
